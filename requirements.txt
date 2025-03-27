@@ -1,0 +1,11 @@
+openai-whisper
+langchain_openai
+OpenAI
+whisper
+pydantic
+wave
+tqdm
+torch
+pyannote.audio
+numpy<2.0
+pydub
