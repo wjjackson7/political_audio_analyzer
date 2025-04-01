@@ -4,7 +4,7 @@ analyzes audio files and creates useful output based on them
 need to use python3.9 or high for library dependencies
 run 
 
-pip install -r requirements
+pip install -r requirements.txt
 
 will need api keys from https://huggingface.co/settings/tokens
 there were alot of things on the website I had to enable that I dont remember all of the settings but outputs were very helpful
