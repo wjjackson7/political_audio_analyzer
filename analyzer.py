@@ -39,15 +39,26 @@ def splice_audio(path):
 
     return output_path
 
-def convert_audio_to_wav(input_path, output_path):
-    audio = AudioSegment.from_file(input_path)
+def convert_m4a_to_wav(input_path, output_path):
+    print("Converting m4a to wav: ", input_path)
+    audio = AudioSegment.from_file(input_path, format="m4a")
     audio.export(output_path, format="wav")
 
     print(f"Audio converted to WAV and saved to {output_path}")
 
 def get_transcript(path,filename):
-    audio_path = os.path.join(path, filename.replace(".m4a", ".wav"))
+    audio_path = os.path.join(path, filename)
     print(audio_path)
+    
+    # Convert M4A to WAV if needed
+    if filename.lower().endswith('.m4a'):
+        wav_filename = filename.replace('.m4a', '.wav')
+        wav_path = os.path.join(path, wav_filename)
+        convert_m4a_to_wav(audio_path, wav_path)
+        audio_path = wav_path
+        filename = wav_filename
+
+    
     start_time = time.time()
     model = whisper.load_model("base")
 
@@ -67,8 +78,7 @@ def get_transcript(path,filename):
 
     # Create a separate thread to run diarization while showing a progress bar
     diarization_result = []
-
-    
+     
     def run_diarization():
         try:
             diarization_result.append(diarization_pipeline(audio_path))
@@ -135,6 +145,6 @@ def loop_through_directory(root_dir):
         for filename in filenames:
             if filename.endswith(".m4a"):
                 file_path = os.path.join(dirpath, filename)
-                convert_audio_to_wav(file_path,os.path.join(dirpath, filename.replace(".m4a", ".wav")))
+                convert_m4a_to_wav(file_path,os.path.join(dirpath, filename.replace(".m4a", ".wav")))
                 get_transcript(dirpath,filename.replace(".m4a", ".wav"))
                 exit()
